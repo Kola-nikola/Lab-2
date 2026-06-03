@@ -1,3 +1,36 @@
-<Solution>
-  <Project Path="Lab 5/Lab 5.csproj" />
-</Solution>
+using System;
+
+namespace Lab05
+{
+    class Program
+    {
+        static void Main()
+        {
+            Console.Write("Введіть рядок: ");
+            string input = Console.ReadLine();
+
+            string result = CompressString(input);
+
+            Console.WriteLine($"Результат: {result}");
+        }
+
+        static string CompressString(string str)
+        {
+            if (string.IsNullOrEmpty(str)) return str;
+
+            char prev = str[0];
+            string output = prev.ToString();
+
+            for (int i = 1; i < str.Length; i++)
+            {
+                if (str[i] != prev) // якщо символ відрізняється від попереднього
+                {
+                    output += str[i];
+                    prev = str[i];
+                }
+            }
+
+            return output;
+        }
+    }
+}
