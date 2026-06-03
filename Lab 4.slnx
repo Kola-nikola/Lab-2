@@ -1,3 +1,114 @@
-<Solution>
-  <Project Path="Lab 4/Lab 4.csproj" />
-</Solution>
+using System;
+using System.Linq;
+
+namespace Lab04
+{
+    class Program
+    {
+        static void Main()
+        {
+            Console.WriteLine("=== Одновимірний масив ===");
+            Console.Write("Введіть кількість елементів n: ");
+            int n = int.Parse(Console.ReadLine());
+
+            double[] arr = new double[n];
+            Console.WriteLine("Введіть елементи масиву:");
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"arr[{i}] = ");
+                arr[i] = double.Parse(Console.ReadLine());
+            }
+
+            // а) максимальний за модулем елемент
+            double maxAbs = arr.Max(x => Math.Abs(x));
+            Console.WriteLine($"\nМаксимальний за модулем елемент: {maxAbs}");
+
+            // б) сума елементів між першим і другим додатними
+            int firstPos = Array.FindIndex(arr, x => x > 0);
+            int secondPos = Array.FindIndex(arr, firstPos + 1, x => x > 0);
+            double sumBetween = 0;
+
+            if (firstPos != -1 && secondPos != -1 && secondPos > firstPos + 1)
+            {
+                for (int i = firstPos + 1; i < secondPos; i++)
+                    sumBetween += arr[i];
+                Console.WriteLine($"Сума між першим і другим додатними: {sumBetween}");
+            }
+            else
+            {
+                Console.WriteLine("Неможливо обчислити суму — недостатньо додатних елементів.");
+            }
+
+            // Перетворення: нулі після всіх інших
+            double[] transformed = arr.Where(x => x != 0).Concat(arr.Where(x => x == 0)).ToArray();
+
+            Console.WriteLine("\nМасив після перетворення (нулі в кінці):");
+            foreach (double x in transformed)
+                Console.Write($"{x}\t");
+
+            // Сортування для наочності
+            Console.WriteLine("\n\nМасив за зростанням:");
+            Array.Sort(arr);
+            foreach (double x in arr)
+                Console.Write($"{x}\t");
+
+            // === Двовимірний масив ===
+            Console.WriteLine("\n\n=== Двовимірний масив ===");
+            Console.Write("Введіть кількість рядків: ");
+            int rows = int.Parse(Console.ReadLine());
+            Console.Write("Введіть кількість стовпців: ");
+            int cols = int.Parse(Console.ReadLine());
+
+            double[,] matrix = new double[rows, cols];
+            Console.WriteLine("Введіть елементи матриці:");
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    Console.Write($"[{i},{j}] = ");
+                    matrix[i, j] = double.Parse(Console.ReadLine());
+                }
+            }
+
+            Console.WriteLine("\nМатриця:");
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                    Console.Write($"{matrix[i, j],8}");
+                Console.WriteLine();
+            }
+
+            // а) сума двох будь-яких елементів другого рядка
+            if (rows >= 2)
+            {
+                Console.Write("\nВведіть два індекси елементів другого рядка (через пробіл): ");
+                string[] idx = Console.ReadLine().Split(' ');
+                int a = int.Parse(idx[0]);
+                int b = int.Parse(idx[1]);
+                double sumRow2 = matrix[1, a] + matrix[1, b];
+                Console.WriteLine($"Сума елементів другого рядка: {sumRow2}");
+            }
+            else
+            {
+                Console.WriteLine("У матриці менше двох рядків.");
+            }
+
+            // б) добуток двох будь-яких елементів п’ятого стовпця
+            if (cols >= 5)
+            {
+                Console.Write("\nВведіть два індекси рядків для п’ятого стовпця (через пробіл): ");
+                string[] idx2 = Console.ReadLine().Split(' ');
+                int r1 = int.Parse(idx2[0]);
+                int r2 = int.Parse(idx2[1]);
+                double prodCol5 = matrix[r1, 4] * matrix[r2, 4];
+                Console.WriteLine($"Добуток елементів п’ятого стовпця: {prodCol5}");
+            }
+            else
+            {
+                Console.WriteLine("У матриці менше п’яти стовпців.");
+            }
+
+            Console.WriteLine("\nРозрахунки завершено ✅");
+        }
+    }
+}
