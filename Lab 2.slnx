@@ -1,3 +1,47 @@
-<Solution>
-  <Project Path="Lab 2/Lab 2.csproj" />
-</Solution>
+using System;
+
+namespace Lab02
+{
+    class Book
+    {
+        public string title;
+        public string author;
+        public int year;
+
+        public Book() : this("Невідомо", "Невідомо", 0) { }
+        public Book(string title) : this(title, "Невідомо", 0) { }
+        public Book(string title, string author, int year)
+        {
+            this.title = title;
+            this.author = author;
+            this.year = year;
+        }
+
+        public void Print()
+        {
+            Console.WriteLine($"Назва: {title}, Автор: {author}, Рік: {year}");
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            // ---- Ввід від користувача ----
+            Console.Write("Введіть назву книги: ");
+            string userTitle = Console.ReadLine();
+
+            Console.Write("Введіть автора: ");
+            string userAuthor = Console.ReadLine();
+
+            Console.Write("Введіть рік: ");
+            int userYear = int.Parse(Console.ReadLine());
+
+            Book userBook = new Book(userTitle, userAuthor, userYear);
+            userBook.Print();
+
+            // Щоб програма не закривалась одразу
+            Console.ReadLine();
+        }
+    }
+}
