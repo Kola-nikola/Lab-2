@@ -1,3 +1,139 @@
-<Solution>
-  <Project Path="Lab 3/Lab 3.csproj" />
-</Solution>
+using System;
+
+namespace Lab03
+{
+    // Абстрактний базовий клас
+    abstract class Pair
+    {
+        // Віртуальні арифметичні операції
+        public abstract Pair Add(Pair other);
+        public abstract Pair Sub(Pair other);
+        public abstract void Print();
+    }
+
+    // Клас Money (гривні + копійки)
+    class Money : Pair
+    {
+        public long Hryvnia { get; set; }
+        public byte Kopiyka { get; set; }
+
+        public Money(long hryvnia, byte kopiyka)
+        {
+            Hryvnia = hryvnia;
+            Kopiyka = kopiyka;
+        }
+
+        // Додавання
+        public override Pair Add(Pair other)
+        {
+            Money m = (Money)other;
+            long totalKop = Hryvnia * 100 + Kopiyka + m.Hryvnia * 100 + m.Kopiyka;
+            return new Money(totalKop / 100, (byte)(totalKop % 100));
+        }
+
+        // Віднімання
+        public override Pair Sub(Pair other)
+        {
+            Money m = (Money)other;
+            long totalKop = Hryvnia * 100 + Kopiyka - (m.Hryvnia * 100 + m.Kopiyka);
+            return new Money(totalKop / 100, (byte)(totalKop % 100));
+        }
+
+        public override void Print()
+        {
+            Console.WriteLine($"{Hryvnia} грн {Kopiyka} коп");
+        }
+    }
+
+    // Клас Complex (комплексні числа)
+    class Complex : Pair
+    {
+        public double Real { get; set; }
+        public double Imag { get; set; }
+
+        public Complex(double real, double imag)
+        {
+            Real = real;
+            Imag = imag;
+        }
+
+        public override Pair Add(Pair other)
+        {
+            Complex c = (Complex)other;
+            return new Complex(Real + c.Real, Imag + c.Imag);
+        }
+
+        public override Pair Sub(Pair other)
+        {
+            Complex c = (Complex)other;
+            return new Complex(Real - c.Real, Imag - c.Imag);
+        }
+
+        public override void Print()
+        {
+            Console.WriteLine($"{Real} + {Imag}i");
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            bool running = true;
+
+            while (running)
+            {
+                Console.WriteLine("\n=== МЕНЮ ===");
+                Console.WriteLine("1 – Робота з грошима");
+                Console.WriteLine("2 – Робота з комплексними числами");
+                Console.WriteLine("3 – Вихід");
+                Console.Write("Ваш вибір: ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        Console.Write("Введіть перші 2 суми (грн коп): ");
+                        string[] m1 = Console.ReadLine().Split(' ');
+                        Money money1 = new Money(long.Parse(m1[0]), byte.Parse(m1[1]));
+
+                        Console.Write("Введіть другі 2 суми (грн коп): ");
+                        string[] m2 = Console.ReadLine().Split(' ');
+                        Money money2 = new Money(long.Parse(m2[0]), byte.Parse(m2[1]));
+
+                        Pair sumM = money1.Add(money2);
+                        Pair subM = money1.Sub(money2);
+
+                        Console.WriteLine("Сума: "); sumM.Print();
+                        Console.WriteLine("Різниця: "); subM.Print();
+                        break;
+
+                    case "2":
+                        Console.Write("Введіть перші 2 комплексне числа (real imag): ");
+                        string[] c1 = Console.ReadLine().Split(' ');
+                        Complex comp1 = new Complex(double.Parse(c1[0]), double.Parse(c1[1]));
+
+                        Console.Write("Введіть другі 2 комплексне число (real imag): ");
+                        string[] c2 = Console.ReadLine().Split(' ');
+                        Complex comp2 = new Complex(double.Parse(c2[0]), double.Parse(c2[1]));
+
+                        Pair sumC = comp1.Add(comp2);
+                        Pair subC = comp1.Sub(comp2);
+
+                        Console.WriteLine("Сума: "); sumC.Print();
+                        Console.WriteLine("Різниця: "); subC.Print();
+                        break;
+
+                    case "3":
+                        running = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Невірний вибір!");
+                        break;
+                }
+            }
+        }
+    }
+}
